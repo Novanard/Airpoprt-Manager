@@ -33,7 +33,7 @@ int compareFlightByDate(const void* d1, const void* d2);
 int getSortingType();
 void sortFlightsByType(Airline* al);
 Flight* searchFlightInArray(Airline* al);
-
+int	writeToBfile(Airline* pComp);
 
 #endif
 

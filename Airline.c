@@ -218,5 +218,23 @@ Flight* searchFlightInArray(Airline* al) {
 			return f;
 	}
 }
+int	writeToBfile(Airline* pComp)
+{
+	FILE* fp = fopen("airline.bin", "wb");
+	int len = (int)strlen(pComp->name) + 1;
+	if (fwrite(&len, sizeof(int), 1, fp) != 1) return 0;
+	if (fwrite(pComp->name, sizeof(char), len, fp) != len) return 0;
+	if (fwrite(&pComp->planeCount, sizeof(int), 1, fp) != 1) return 0;
+	// write to file the plane array
+	for (int i = 0; i < pComp->planeCount; i++)
+		printPlaneToBfile(fp, &pComp->planeArr[i]);
 
+	if (fwrite(&pComp->flightCount, sizeof(int), 1, fp) != 1) return 0;
+
+	// write to file the fileds of every flight
+	for (int j = 0; j < pComp->flightCount; j++)
+		printFlightToBFile(fp, pComp->flightArr[j]);
+
+	return 1;
+}
 
