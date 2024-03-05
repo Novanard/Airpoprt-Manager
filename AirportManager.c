@@ -9,12 +9,13 @@
 int	initManager(AirportManager* pManager)
 {
 	L_init(pManager);
+	pManager->ptr = &pManager->airportsList.head;
 	return 1;
 }
 
 int	addAirport(AirportManager* pManager)
 {
-	Airport* pPort  = (Airport*)calloc(1, sizeof(Airport));
+	Airport* pPort = (Airport*)calloc(1, sizeof(Airport));
 	if (!pPort)
 		return 0;
 
@@ -24,15 +25,26 @@ int	addAirport(AirportManager* pManager)
 		free(pPort);
 		return 0;
 	}
-	NODE *tmp = &pManager->airportsList.head;
-	if (!L_insert(tmp, pPort)) {
-		freeAirport(pPort);
-		free(pPort);
-		return 0;
+	NODE* newAP = (Airport*)malloc(sizeof(Airport));
+	if (pManager->ptr == NULL || strcmp(pPort->code, ((Airport*)pManager->ptr)->code) < 0) {
+		//The airport needs to be placed at the beginning
+		newAP->key = pPort;
+		newAP->next = pManager->ptr;
+		pManager->ptr = newAP;
 	}
+	else { // We need to scan the list to find out where the correct place is
+		NODE* tempNode = pManager->ptr;
+		while (tempNode->next != NULL && strcmp(((Airport*)tempNode->next)->code, pPort->code) < 0)
+			tempNode = tempNode->next;
+		if (!L_insert(tempNode, pPort)) {
+			freeAirport(pPort);
+			free(pPort);
+			return 0;
+		}
 
-	return 1;
+		return 1;
 
+	}
 }
 
 int  initAirport(Airport* pPort, AirportManager* pManager)

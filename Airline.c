@@ -190,12 +190,33 @@ void sortFlightsByType(Airline* al) {
 		break;
 	}
 }
-Flight* searchFlightInArray(Airline* al,Flight* f) {
+Flight* searchFlightInArray(Airline* al) {
+	Flight* f = (Flight*)malloc(sizeof(Flight));
 	if (al->sortBy == 3) {
 		printf("The array is not sorted, can not binary search");
 		return;
 	}
-	bsearch(f, al->flightArr, al->flightCount, sizeof(Flight), sortFlightsByType);
+	else if (al->sortBy == 2) { // search by Date
+		printf("Enter the flight date you wish to search\n");
+		Date* d=(Date*)malloc(sizeof(Date));
+		getCorrectDate(&d);
+		f=bsearch(&d, al->flightArr, al->flightCount, sizeof(Flight), compareFlightByDate);
+		if (f != NULL)
+			return f;
+	}
+	else if (al->sortBy == 1) { // Search by Dest Code
+		char* dest = getStrExactName("Enter the dest code you want to search\n");
+		f=bsearch(dest, al->flightArr, al->flightCount, sizeof(Flight), compareFlightByDest);
+		if (f != NULL)
+			return f;
+
+	}
+	else { // Search by source
+		char* source = getStrExactName("Enter the source code you want to search\n");
+		f=bsearch(source, al->flightArr, al->flightCount, sizeof(Flight), compareFlightBySource);
+		if (f != NULL)
+			return f;
+	}
 }
 
 
