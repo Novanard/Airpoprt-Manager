@@ -1,1 +1,1 @@
-Project for handling Airport Management that was coded during my C Course in Afeka College.
+The Airport Management System project aimed to create a software solution to streamline various operations within an airport environment.
